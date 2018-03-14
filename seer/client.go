@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc"
 )
 
@@ -65,21 +67,26 @@ func (c *Client) ListStreams(pageNum, pageSize int) (s []*Stream, err error) {
 
 // UpdateStream sends the provided data to the specific stream.
 func (c *Client) UpdateStream(name string, times []time.Time, values []float64) (s *Stream, err error) {
-	ptimes := make([]...)
+	ptimes := make([]*timestamp.Timestamp, len(times))
+	for i := range times {
+		ptimes[i], _ = ptypes.TimestampProto(times[i])
+	}
 	in := &UpdateStreamRequest{
 		Name: name,
-		Times:
-		Values: values,
+		Event: &Event{
+			Times:  ptimes,
+			Values: values,
+		},
 	}
-	s, err = c.conn.CreateStream(context.Background(), in)
+	s, err = c.conn.UpdateStream(context.Background(), in)
 	return s, err
 }
 
 // GetForecast generates a forecast from the specified stream.
-func GetForecast(name string, length int) (f *Forecast, err error) {
+func (c *Client) GetForecast(name string, length int) (f *Forecast, err error) {
 	in := &GetForecastRequest{
 		Name: name,
-		N: in32(length),
+		N:    int32(length),
 	}
 	f, err = c.conn.GetForecast(context.Background(), in)
 	return f, err
