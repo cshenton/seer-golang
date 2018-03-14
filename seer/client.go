@@ -16,7 +16,7 @@ type Client struct {
 
 // New dials the specified seer server and returns a client.
 func New(address string) (c *Client, err error) {
-	conn, err := grpc.Dial(address, grpc.WithDefaultCallOptions())
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
