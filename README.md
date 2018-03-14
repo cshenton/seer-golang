@@ -32,7 +32,7 @@ import (
         "log"
         "time"
 
-       "github.com/cshenton/seer-golang/seer"
+        "github.com/cshenton/seer-golang/seer"
 )
 
 func main() {
@@ -66,4 +66,10 @@ func main() {
         f, err = c.GetForecast("myStream", 10)
         fmt.Println(f)
 }
+```
+
+## (For Contributors) Generating gRPC Client stubs
+
+```bash
+protoc -I ../seer/seer --go_out=plugins=grpc:seer ../seer/seer/seer.proto
 ```
