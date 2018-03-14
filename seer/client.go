@@ -1,6 +1,7 @@
 package seer
 
 import (
+	"context"
 	"time"
 
 	"google.golang.org/grpc"
@@ -8,7 +9,7 @@ import (
 
 // Client is a seer client
 type Client struct {
-	SeerClient
+	conn SeerClient
 }
 
 // New dials the specified seer server and returns a client.
@@ -22,31 +23,64 @@ func New(address string) (c *Client, err error) {
 }
 
 // CreateStream creates a stream with the specified data on the server.
-func CreateStream(name string, period float64) (s *Stream, err error) {
-	return
+func (c *Client) CreateStream(name string, period float64) (s *Stream, err error) {
+	in := &CreateStreamRequest{
+		&Stream{
+			Name:   name,
+			Period: period,
+		},
+	}
+	s, err = c.conn.CreateStream(context.Background(), in)
+	return s, err
 }
 
 // GetStream retrieves the stream with the specified name.
-func GetStream(name string) (s *Stream, err error) {
-	return
+func (c *Client) GetStream(name string) (s *Stream, err error) {
+	in := &GetStreamRequest{
+		Name: name,
+	}
+	s, err = c.conn.GetStream(context.Background(), in)
+	return s, err
 }
 
 // DeleteStream deletes the stream with the specified name.
-func DeleteStream(name string) (err error) {
-	return
+func (c *Client) DeleteStream(name string) (err error) {
+	in := &DeleteStreamRequest{
+		Name: name,
+	}
+	_, err = c.conn.DeleteStream(context.Background(), in)
+	return err
 }
 
 // ListStreams returns a paged slice of streams.
-func ListStreams(pageNum, pageSize int) (s []*Stream, err error) {
-	return
+func (c *Client) ListStreams(pageNum, pageSize int) (s []*Stream, err error) {
+	in := &ListStreamsRequest{
+		PageNumber: int32(pageNum),
+		PageSize:   int32(pageSize),
+	}
+	resp, err := c.conn.ListStreams(context.Background(), in)
+	s = resp.Streams
+	return s, err
 }
 
 // UpdateStream sends the provided data to the specific stream.
-func UpdateStream(name string, times []time.Time, values []float64) (s *Stream, err error) {
-	return
+func (c *Client) UpdateStream(name string, times []time.Time, values []float64) (s *Stream, err error) {
+	ptimes := make([]...)
+	in := &UpdateStreamRequest{
+		Name: name,
+		Times:
+		Values: values,
+	}
+	s, err = c.conn.CreateStream(context.Background(), in)
+	return s, err
 }
 
 // GetForecast generates a forecast from the specified stream.
 func GetForecast(name string, length int) (f *Forecast, err error) {
-	return
+	in := &GetForecastRequest{
+		Name: name,
+		N: in32(length),
+	}
+	f, err = c.conn.GetForecast(context.Background(), in)
+	return f, err
 }
