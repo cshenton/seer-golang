@@ -1,0 +1,21 @@
+language: go
+
+go:
+  - "1.10.x"
+
+services:
+  - docker
+
+before_install:
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/modocache/gover
+  - go get github.com/mattn/goveralls
+  # Client is tested against a real copy of the server
+  - docker pull cshenton/seer
+  - docker run -d -p 127.0.0.1:8080:8080 cshenton/seer
+  - docker ps -a
+
+script:
+  - go test -v -coverprofile=.coverprofile ./...
+  - $GOPATH/bin/gover
+  - $GOPATH/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci
