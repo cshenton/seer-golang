@@ -32,12 +32,12 @@ import (
         "log"
         "time"
 
-        "github.com/cshenton/seer-golang/seer"
+        "github.com/cshenton/seer-golang/client"
 )
 
 func main() {
         // Create a client
-        c, err := seer.New("localhost:8080")
+        c, err := client.New("localhost:8080")
         if err != nil {
                 log.Fatal(err)
         }
@@ -71,7 +71,7 @@ func main() {
 ## (For Contributors) Generating gRPC Client stubs
 
 ```bash
-protoc -I ../seer/seer --go_out=plugins=grpc:pb ../seer/seer/seer.proto
+protoc -I ../seer/seer --go_out=plugins=grpc:seer ../seer/seer/seer.proto
 ```
 
 We then add `//+build !test` to the top of the file to exclude it from coverage
