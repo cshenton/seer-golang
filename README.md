@@ -1,6 +1,6 @@
 # Seer Golang Client
 [![Build Status](https://travis-ci.org/cshenton/seer-golang.svg?branch=master)](https://travis-ci.org/cshenton/seer-golang)
-[![Coverage Status](https://coveralls.io/repos/github/cshenton/seer-golang/badge.svg?branch=master)](https://coveralls.io/github/cshenton/seer-golang?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/github/cshenton/seer-golang/master.svg)](https://coveralls.io/github/cshenton/seer-golang?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cshenton/seer-golang)](https://goreportcard.com/report/github.com/cshenton/seer-golang)
 
 The golang client for the seer forecasting server.
