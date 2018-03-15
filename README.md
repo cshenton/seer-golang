@@ -32,12 +32,12 @@ import (
         "log"
         "time"
 
-        "github.com/cshenton/seer-golang/seer"
+        "github.com/cshenton/seer-golang/client"
 )
 
 func main() {
         // Create a client
-        c, err := seer.New("localhost:8080")
+        c, err := client.New("localhost:8080")
         if err != nil {
                 log.Fatal(err)
         }
@@ -73,3 +73,7 @@ func main() {
 ```bash
 protoc -I ../seer/seer --go_out=plugins=grpc:seer ../seer/seer/seer.proto
 ```
+
+We then add `//+build !test` to the top of the file to exclude it from coverage
+statistics (since it has a tonne of redundant code, like the Get* methods and
+the server interfaces, which are not used, and therefore don't require testing).

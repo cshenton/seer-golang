@@ -1,17 +1,18 @@
-package seer_test
+package client_test
 
 import (
 	"math/rand"
 	"testing"
 	"time"
 
-	"github.com/cshenton/seer-golang/seer"
+	"github.com/cshenton/seer-golang/client"
 	"github.com/golang/protobuf/ptypes"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randString(n int) string {
+	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letterRunes[rand.Intn(len(letterRunes))]
@@ -19,32 +20,32 @@ func randString(n int) string {
 	return string(b)
 }
 
-func setUp(t *testing.T) (name string, client *seer.Client) {
-	client, err := seer.New("localhost:8080")
+func setUp(t *testing.T) (name string, c *client.Client) {
+	c, err := client.New("localhost:8080")
 	if err != nil {
 		t.Fatal("unexpected error in New:", err)
 	}
 	name = randString(10)
-	_, err = client.CreateStream(name, 86400)
+	_, err = c.CreateStream(name, 86400)
 	if err != nil {
 		t.Fatal("unexpected error in CreateStream:", err)
 	}
-	return name, client
+	return name, c
 }
 
 func TestNew(t *testing.T) {
-	_, err := seer.New("localhost:8080")
+	_, err := client.New("localhost:8080")
 	if err != nil {
 		t.Error("unexpected error in New:", err)
 	}
 }
 
 func TestCreateStream(t *testing.T) {
-	_, client := setUp(t)
+	_, c := setUp(t)
 
 	name := randString(10)
 
-	s, err := client.CreateStream(name, 3600)
+	s, err := c.CreateStream(name, 3600)
 	if err != nil {
 		t.Fatal("unexpected error in CreateStream:", err)
 	}
@@ -57,9 +58,9 @@ func TestCreateStream(t *testing.T) {
 }
 
 func TestGetStream(t *testing.T) {
-	name, client := setUp(t)
+	name, c := setUp(t)
 
-	s, err := client.GetStream(name)
+	s, err := c.GetStream(name)
 	if err != nil {
 		t.Fatal("unexpected error in GetStream:", err)
 	}
@@ -72,18 +73,18 @@ func TestGetStream(t *testing.T) {
 }
 
 func TestDeleteStream(t *testing.T) {
-	name, client := setUp(t)
+	name, c := setUp(t)
 
-	err := client.DeleteStream(name)
+	err := c.DeleteStream(name)
 	if err != nil {
 		t.Error("unexpected error in DeleteStream:", err)
 	}
 }
 
 func TestListStreams(t *testing.T) {
-	name, client := setUp(t)
+	name, c := setUp(t)
 
-	s, err := client.ListStreams(1, 10)
+	s, err := c.ListStreams(1, 10)
 	if err != nil {
 		t.Error("unexpected error in ListStreams:", err)
 	}
@@ -103,9 +104,9 @@ func TestListStreams(t *testing.T) {
 }
 
 func TestUpdateStream(t *testing.T) {
-	name, client := setUp(t)
+	name, c := setUp(t)
 
-	s, err := client.UpdateStream(
+	s, err := c.UpdateStream(
 		name,
 		[]time.Time{
 			time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -128,14 +129,14 @@ func TestUpdateStream(t *testing.T) {
 }
 
 func TestGetForecast(t *testing.T) {
-	name, client := setUp(t)
+	name, c := setUp(t)
 
-	_, err := client.UpdateStream(name, []time.Time{time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC)}, []float64{20})
+	_, err := c.UpdateStream(name, []time.Time{time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC)}, []float64{20})
 	if err != nil {
 		t.Error("unexpected error in UpdateStream:", err)
 	}
 
-	f, err := client.GetForecast(name, 100)
+	f, err := c.GetForecast(name, 100)
 	if err != nil {
 		t.Error("unexpected error in GetForecast:", err)
 	}
