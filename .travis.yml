@@ -19,7 +19,7 @@ before_install:
   - docker ps -a
 
 script:
-  - go test -v -coverprofile=.coverprofile ./...
+  - go test -v -coverprofile=.coverprofile -tags test ./...
 
 after_success:
   - $GOPATH/bin/gover

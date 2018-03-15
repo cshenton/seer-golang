@@ -71,5 +71,9 @@ func main() {
 ## (For Contributors) Generating gRPC Client stubs
 
 ```bash
-protoc -I ../seer/seer --go_out=plugins=grpc:seer ../seer/seer/seer.proto
+protoc -I ../seer/seer --go_out=plugins=grpc:pb ../seer/seer/seer.proto
 ```
+
+We then add `//+build !test` to the top of the file to exclude it from coverage
+statistics (since it has a tonne of redundant code, like the Get* methods and
+the server interfaces, which are not used, and therefore don't require testing).
