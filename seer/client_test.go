@@ -141,6 +141,6 @@ func TestGetForecast(t *testing.T) {
 	}
 
 	if len(f.Values) != 100 {
-		t.Error("expected values length %v, but got %v", 100, len(f.Values))
+		t.Errorf("expected values length %v, but got %v", 100, len(f.Values))
 	}
 }
