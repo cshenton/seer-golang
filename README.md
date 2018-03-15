@@ -1,7 +1,7 @@
 # Seer Golang Client
-[![Build Status](https://travis-ci.org/cshenton/seer-python.svg?branch=master)](https://travis-ci.org/cshenton/seer-python)
-[![Python Version](https://img.shields.io/pypi/pyversions/seer.svg)](https://pypi.org/project/seer/)
-[![Coverage Status](https://coveralls.io/repos/github/cshenton/seer-python/badge.svg?branch=master)](https://coveralls.io/github/cshenton/seer-python?branch=master)
+[![Build Status](https://travis-ci.org/cshenton/seer-golang.svg?branch=master)](https://travis-ci.org/cshenton/seer-golang)
+[![Coverage Status](https://coveralls.io/repos/github/cshenton/seer-golang/badge.svg?branch=master)](https://coveralls.io/github/cshenton/seer-golang?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cshenton/seer-golang)](https://goreportcard.com/report/github.com/cshenton/seer-golang)
 
 The golang client for the seer forecasting server.
 
@@ -32,7 +32,7 @@ import (
         "log"
         "time"
 
-       "github.com/cshenton/seer-golang/seer"
+        "github.com/cshenton/seer-golang/seer"
 )
 
 func main() {
@@ -66,4 +66,10 @@ func main() {
         f, err = c.GetForecast("myStream", 10)
         fmt.Println(f)
 }
+```
+
+## (For Contributors) Generating gRPC Client stubs
+
+```bash
+protoc -I ../seer/seer --go_out=plugins=grpc:seer ../seer/seer/seer.proto
 ```
