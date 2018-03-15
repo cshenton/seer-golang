@@ -66,7 +66,7 @@ func TestGetStream(t *testing.T) {
 	if s.Name != name {
 		t.Errorf("expected name %v, but got %v", name, s.Name)
 	}
-	if s.Period != 3600 {
+	if s.Period != 86400 {
 		t.Errorf("expected period %v, but got %v", 86400, s.Period)
 	}
 }
