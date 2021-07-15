@@ -51,12 +51,12 @@ func main() {
         // Add in data
         _, err = c.UpdateStream(
                 "myStream",
-                []float64{10, 9, 6},
                 []time.Time{
                         time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC),
-                        time.Date(2016, 1, 2, 0, 0, 0, 0, time.UTC),
-                        time.Date(2016, 1, 3, 0, 0, 0, 0, time.UTC),
+                        time.Date(2016, 1, 1, 1, 0, 0, 0, time.UTC),
+                        time.Date(2016, 1, 1, 2, 0, 0, 0, time.UTC),
                 },
+                []float64{10, 9, 6},
         )
         if err != nil {
                 log.Fatal(err)
@@ -64,6 +64,10 @@ func main() {
 
         // Generate and display forecast
         f, err = c.GetForecast("myStream", 10)
+        if err != nil {
+                log.Fatal(err)
+        }
+
         fmt.Println(f)
 }
 ```
